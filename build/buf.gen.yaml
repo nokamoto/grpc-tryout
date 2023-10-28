@@ -8,4 +8,4 @@ plugins:
     opt: paths=source_relative
   - plugin: tryout
     out: build/tryout
-    opt: debug
+    opt: debug,multiline
