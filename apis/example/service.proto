@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package example;
+
+import "apis/example/resource.proto";
+
+option go_package = "github.com/nokamoto/grpc-tryout/pkg/apis/example";
+
+service Library {
+  rpc GetShelf(GetShelfRequest) returns (Shelf);
+}
+
+message GetShelfRequest {
+  string name = 1;
+}

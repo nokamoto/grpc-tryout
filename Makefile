@@ -12,13 +12,16 @@ $(gobin)/gofumpt:
 $(gobin)/golangci-lint:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
+$(gobin)/protoc-gen-connect-go:
+	go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
+
 $(gobin)/protoc-gen-go:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 $(gobin)/yamlfmt:
 	go install github.com/google/yamlfmt/cmd/yamlfmt@latest
 
-proto: $(gobin)/buf $(gobin)/protoc-gen-go
+proto: $(gobin)/buf $(gobin)/protoc-gen-connect-go $(gobin)/protoc-gen-go
 	rm -rf pkg/apis
 	buf format -w
 	buf generate --template build/buf.gen.yaml
