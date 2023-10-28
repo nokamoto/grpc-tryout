@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package tryout;
+
+option go_package = "github.com/nokamoto/grpc-tryout/tryout/pkg/apis/tryout";
+
+message Method {
+  string name = 1;
+}
