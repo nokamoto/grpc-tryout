@@ -6,3 +6,6 @@ plugins:
   - plugin: connect-go
     out: pkg
     opt: paths=source_relative
+  - plugin: tryout
+    out: build/tryout
+    opt: debug
