@@ -6,8 +6,15 @@ option go_package = "github.com/nokamoto/grpc-tryout/tryout/pkg/apis/tryout";
 
 message Method {
   string name = 1;
+  repeated string fields = 2;
 }
 
-message TryOut {
+message Service {
+  string name = 1;
   repeated Method methods = 2;
+}
+
+message Proto {
+  string name = 1;
+  repeated Service services = 2;
 }
