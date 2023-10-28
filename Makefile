@@ -1,7 +1,7 @@
 buf = go run github.com/bufbuild/buf/cmd/buf@latest
 gobin = $(shell go env GOPATH)/bin
 
-all: yaml proto golang
+all: yaml golang
 
 $(gobin)/buf:
 	go install github.com/bufbuild/buf/cmd/buf@latest
@@ -27,7 +27,7 @@ proto: $(gobin)/buf $(gobin)/protoc-gen-connect-go $(gobin)/protoc-gen-go
 	buf format -w
 	buf generate --template build/buf.gen.yaml
 
-golang: $(gobin)/gofumpt $(gobin)/golangci-lint
+golang: $(gobin)/gofumpt $(gobin)/golangci-lint proto
 	gofumpt -w .
 	go test ./...
 	go mod tidy
