@@ -10,7 +10,7 @@ $(gobin)/gofumpt:
 	go install mvdan.cc/gofumpt@latest
 
 $(gobin)/golangci-lint:
-	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 $(gobin)/protoc-gen-go:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
