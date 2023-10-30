@@ -1,0 +1,16 @@
+{
+  "name": "apis/example/service.proto",
+  "services": [
+    {
+      "name": "Library",
+      "methods": [
+        {
+          "name": "GetShelf",
+          "fields": [
+            "name"
+          ]
+        }
+      ]
+    }
+  ]
+}
