@@ -51,7 +51,8 @@ func TestOption_Run(t *testing.T) {
 						},
 					},
 					{
-						Name: proto.String("apis/example/service.proto"),
+						Name:    proto.String("apis/example/service.proto"),
+						Package: proto.String("example"),
 						Service: []*descriptorpb.ServiceDescriptorProto{
 							{
 								Name: proto.String("Library"),
@@ -75,6 +76,7 @@ func TestOption_Run(t *testing.T) {
 							Methods: []*tryout.Method{
 								{
 									Name:   "GetShelf",
+									Path:   "/example.Library/GetShelf",
 									Fields: []string{"name"},
 								},
 							},

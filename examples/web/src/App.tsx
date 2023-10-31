@@ -6,9 +6,15 @@ import { Method, Proto, Service } from "./gen/apis/tryout/tryout_pb";
 const baseUrl = document.location.href.replace("5173", "8080");
 
 function MethodForm(props: { method: Method }) {
-  const [request, setRequest] = useState<any>({
-    "name": "",
-  });
+  const initial = () => {
+    const v: any = {};
+    props.method.fields.forEach((field) => {
+      v[field] = "";
+    });
+    return v;
+  };
+
+  const [request, setRequest] = useState<any>(initial());
   const [response, setResponse] = useState<any>({});
   const [error, setError] = useState<any>({});
 
@@ -20,7 +26,7 @@ function MethodForm(props: { method: Method }) {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await fetch(new URL("/example.Library/GetShelf", baseUrl), {
+          await fetch(new URL(props.method.path, baseUrl), {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -57,7 +63,10 @@ function MethodList(props: { service: Service }) {
       <h2>{props.service.name}</h2>
       <div>
         {props.service.methods.map((method) => (
-          <MethodForm method={method} key={props.service.name + "/" + method.name} />
+          <MethodForm
+            method={method}
+            key={props.service.name + "/" + method.name}
+          />
         ))}
       </div>
     </div>

@@ -16,7 +16,12 @@ export class Method extends Message<Method> {
   name = "";
 
   /**
-   * @generated from field: repeated string fields = 2;
+   * @generated from field: string path = 2;
+   */
+  path = "";
+
+  /**
+   * @generated from field: repeated string fields = 3;
    */
   fields: string[] = [];
 
@@ -29,7 +34,8 @@ export class Method extends Message<Method> {
   static readonly typeName = "tryout.Method";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "fields", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 2, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "fields", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Method {

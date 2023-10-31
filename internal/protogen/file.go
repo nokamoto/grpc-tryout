@@ -34,7 +34,7 @@ func (d fileDesc) message(typ string) (*descriptorpb.DescriptorProto, error) {
 func (d fileDesc) proto() (*tryout.Proto, error) {
 	var services []*tryout.Service
 	for _, s := range d.desc.GetService() {
-		d.debugf("service: %s", s.GetName())
+		d.debugf("service: %s.%s", d.desc.GetPackage(), s.GetName())
 		service, err := serviceDesc{
 			fileDesc: d,
 			desc:     s,
@@ -102,6 +102,7 @@ func (d methodDesc) method() (*tryout.Method, error) {
 	}
 	return &tryout.Method{
 		Name:   d.desc.GetName(),
+		Path:   fmt.Sprintf("/%s.%s/%s", d.fileDesc.desc.GetPackage(), d.serviceDesc.desc.GetName(), d.desc.GetName()),
 		Fields: fields,
 	}, nil
 }

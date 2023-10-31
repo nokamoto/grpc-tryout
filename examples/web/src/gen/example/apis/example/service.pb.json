@@ -1,12 +1,13 @@
 {
-  "name": "apis/example/service.proto",
-  "services": [
+  "name":  "apis/example/service.proto",
+  "services":  [
     {
-      "name": "Library",
-      "methods": [
+      "name":  "Library",
+      "methods":  [
         {
-          "name": "GetShelf",
-          "fields": [
+          "name":  "GetShelf",
+          "path":  "/example.Library/GetShelf",
+          "fields":  [
             "name"
           ]
         }
