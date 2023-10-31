@@ -3,9 +3,9 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { GetShelfRequest } from "./service_pb.js";
+import { CreateShelfRequest, DeleteShelfRequest, GetShelfRequest } from "./service_pb.js";
 import { Shelf } from "./resource_pb.js";
-import { MethodKind } from "@bufbuild/protobuf";
+import { Empty, MethodKind } from "@bufbuild/protobuf";
 
 /**
  * @generated from service example.Library
@@ -20,6 +20,24 @@ export const Library = {
       name: "GetShelf",
       I: GetShelfRequest,
       O: Shelf,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc example.Library.CreateShelf
+     */
+    createShelf: {
+      name: "CreateShelf",
+      I: CreateShelfRequest,
+      O: Shelf,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc example.Library.DeleteShelf
+     */
+    deleteShelf: {
+      name: "DeleteShelf",
+      I: DeleteShelfRequest,
+      O: Empty,
       kind: MethodKind.Unary,
     },
   }
