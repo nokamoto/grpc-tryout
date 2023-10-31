@@ -4,6 +4,14 @@ package example;
 
 option go_package = "github.com/nokamoto/grpc-tryout/pkg/apis/example";
 
+enum Category {
+  UNSPECIFIED = 0;
+  HISTORY = 1;
+  SCIENCE = 2;
+  FICTION = 3;
+}
+
 message Shelf {
   string name = 1;
+  Category category = 2;
 }

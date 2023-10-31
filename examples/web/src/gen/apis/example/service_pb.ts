@@ -5,6 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
+import { Shelf } from "./resource_pb.js";
 
 /**
  * @generated from message example.GetShelfRequest
@@ -40,6 +41,80 @@ export class GetShelfRequest extends Message<GetShelfRequest> {
 
   static equals(a: GetShelfRequest | PlainMessage<GetShelfRequest> | undefined, b: GetShelfRequest | PlainMessage<GetShelfRequest> | undefined): boolean {
     return proto3.util.equals(GetShelfRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message example.CreateShelfRequest
+ */
+export class CreateShelfRequest extends Message<CreateShelfRequest> {
+  /**
+   * @generated from field: example.Shelf shelf = 1;
+   */
+  shelf?: Shelf;
+
+  constructor(data?: PartialMessage<CreateShelfRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "example.CreateShelfRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "shelf", kind: "message", T: Shelf },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CreateShelfRequest {
+    return new CreateShelfRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CreateShelfRequest {
+    return new CreateShelfRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CreateShelfRequest {
+    return new CreateShelfRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: CreateShelfRequest | PlainMessage<CreateShelfRequest> | undefined, b: CreateShelfRequest | PlainMessage<CreateShelfRequest> | undefined): boolean {
+    return proto3.util.equals(CreateShelfRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message example.DeleteShelfRequest
+ */
+export class DeleteShelfRequest extends Message<DeleteShelfRequest> {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name = "";
+
+  constructor(data?: PartialMessage<DeleteShelfRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "example.DeleteShelfRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteShelfRequest {
+    return new DeleteShelfRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeleteShelfRequest {
+    return new DeleteShelfRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeleteShelfRequest {
+    return new DeleteShelfRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DeleteShelfRequest | PlainMessage<DeleteShelfRequest> | undefined, b: DeleteShelfRequest | PlainMessage<DeleteShelfRequest> | undefined): boolean {
+    return proto3.util.equals(DeleteShelfRequest, a, b);
   }
 }
 

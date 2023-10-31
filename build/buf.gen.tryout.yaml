@@ -1,0 +1,8 @@
+version: v1
+plugins:
+  - plugin: tryout
+    out: build/tryout
+    opt: debug,multiline
+  - plugin: tryout
+    out: examples/web/src/gen/example
+    opt: multiline

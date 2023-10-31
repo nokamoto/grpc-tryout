@@ -10,6 +10,20 @@
           "fields":  [
             "name"
           ]
+        },
+        {
+          "name":  "CreateShelf",
+          "path":  "/example.Library/CreateShelf",
+          "fields":  [
+            "shelf"
+          ]
+        },
+        {
+          "name":  "DeleteShelf",
+          "path":  "/example.Library/DeleteShelf",
+          "fields":  [
+            "name"
+          ]
         }
       ]
     }

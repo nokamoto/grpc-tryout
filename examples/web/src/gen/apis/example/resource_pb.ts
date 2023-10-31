@@ -7,6 +7,38 @@ import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialM
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
+ * @generated from enum example.Category
+ */
+export enum Category {
+  /**
+   * @generated from enum value: UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: HISTORY = 1;
+   */
+  HISTORY = 1,
+
+  /**
+   * @generated from enum value: SCIENCE = 2;
+   */
+  SCIENCE = 2,
+
+  /**
+   * @generated from enum value: FICTION = 3;
+   */
+  FICTION = 3,
+}
+// Retrieve enum metadata with: proto3.getEnumType(Category)
+proto3.util.setEnumType(Category, "example.Category", [
+  { no: 0, name: "UNSPECIFIED" },
+  { no: 1, name: "HISTORY" },
+  { no: 2, name: "SCIENCE" },
+  { no: 3, name: "FICTION" },
+]);
+
+/**
  * @generated from message example.Shelf
  */
 export class Shelf extends Message<Shelf> {
@@ -14,6 +46,11 @@ export class Shelf extends Message<Shelf> {
    * @generated from field: string name = 1;
    */
   name = "";
+
+  /**
+   * @generated from field: example.Category category = 2;
+   */
+  category = Category.UNSPECIFIED;
 
   constructor(data?: PartialMessage<Shelf>) {
     super();
@@ -24,6 +61,7 @@ export class Shelf extends Message<Shelf> {
   static readonly typeName = "example.Shelf";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "category", kind: "enum", T: proto3.getEnumType(Category) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Shelf {

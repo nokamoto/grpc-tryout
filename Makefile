@@ -22,10 +22,11 @@ $(gobin)/yamlfmt:
 	go install github.com/google/yamlfmt/cmd/yamlfmt@latest
 
 proto: $(gobin)/buf $(gobin)/protoc-gen-connect-go $(gobin)/protoc-gen-go
-	go install ./cmd/protoc-gen-tryout
 	rm -rf pkg/apis
 	buf format -w
 	buf generate --template build/buf.gen.yaml
+	go install ./cmd/protoc-gen-tryout
+	buf generate --template build/buf.gen.tryout.yaml
 
 golang: $(gobin)/gofumpt $(gobin)/golangci-lint proto
 	gofumpt -w .

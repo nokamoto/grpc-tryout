@@ -3,13 +3,24 @@ syntax = "proto3";
 package example;
 
 import "apis/example/resource.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/nokamoto/grpc-tryout/pkg/apis/example";
 
 service Library {
   rpc GetShelf(GetShelfRequest) returns (Shelf);
+  rpc CreateShelf(CreateShelfRequest) returns (Shelf);
+  rpc DeleteShelf(DeleteShelfRequest) returns (google.protobuf.Empty);
 }
 
 message GetShelfRequest {
+  string name = 1;
+}
+
+message CreateShelfRequest {
+  Shelf shelf = 1;
+}
+
+message DeleteShelfRequest {
   string name = 1;
 }
