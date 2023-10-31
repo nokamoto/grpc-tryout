@@ -5,15 +5,17 @@ import { Method, Proto, Service } from "./gen/apis/tryout/tryout_pb";
 
 const baseUrl = document.location.href.replace("5173", "8080");
 
-function createMethod(method: Method) {
-  const [inputValue, setInputValue] = useState<any>({});
-  const [shelf, setShelf] = useState<any | null>(null);
-  const [error, setError] = useState<any | null>(null);
+function MethodForm(props: { method: Method }) {
+  const [request, setRequest] = useState<any>({
+    "name": "",
+  });
+  const [response, setResponse] = useState<any>({});
+  const [error, setError] = useState<any>({});
 
   return (
     <div>
-      <h3>{method.name}</h3>
-      {shelf && <p>shelf = {JSON.stringify(shelf)}</p>}
+      <h3>{props.method.name}</h3>
+      {response && <p>shelf = {JSON.stringify(response)}</p>}
       {error && <p>error = {JSON.stringify(error)}</p>}
       <form
         onSubmit={async (e) => {
@@ -23,22 +25,22 @@ function createMethod(method: Method) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(inputValue),
+            body: JSON.stringify(request),
           }).then((res) => {
             if (res.ok) {
-              return res.json().then(setShelf);
+              return res.json().then(setResponse);
             }
             return res.json().then(setError);
           });
         }}
       >
-        {method.fields.map((field) => (
-          <label>
+        {props.method.fields.map((field) => (
+          <label key={field}>
             {field}
             <input
-              value={inputValue[field]}
+              value={request[field]}
               onChange={(e) => {
-                setInputValue({ ...inputValue, [field]: e.target.value });
+                setRequest({ ...request, [field]: e.target.value });
               }}
             />
           </label>
@@ -49,17 +51,27 @@ function createMethod(method: Method) {
   );
 }
 
-function createService(service: Service) {
+function MethodList(props: { service: Service }) {
   return (
     <div>
-      <h2>{service.name}</h2>
-      <div>{service.methods.map(createMethod)}</div>
+      <h2>{props.service.name}</h2>
+      <div>
+        {props.service.methods.map((method) => (
+          <MethodForm method={method} key={props.service.name + "/" + method.name} />
+        ))}
+      </div>
     </div>
   );
 }
 
 function App() {
-  return <div>{Proto.fromJson(doc).services.map(createService)}</div>;
+  return (
+    <div>
+      {Proto.fromJson(doc).services.map((service) => (
+        <MethodList service={service} key={service.name} />
+      ))}
+    </div>
+  );
 }
 
 export default App;
