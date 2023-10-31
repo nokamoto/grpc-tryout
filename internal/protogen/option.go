@@ -124,8 +124,12 @@ func (o *Option) responseFile(
 		strings.TrimSuffix(filepath.Base(file.GetName()), filepath.Ext(file.GetName())),
 	)
 
+	var buf strings.Builder
+	buf.Write(bytes)
+	fmt.Fprintln(&buf)
+
 	return &pluginpb.CodeGeneratorResponse_File{
 		Name:    proto.String(filename),
-		Content: proto.String(string(bytes)),
+		Content: proto.String(buf.String()),
 	}, nil
 }
