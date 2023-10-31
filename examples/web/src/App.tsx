@@ -1,68 +1,48 @@
 import "./App.css";
-import { ConnectError, createPromiseClient } from "@connectrpc/connect";
-import { createConnectTransport } from "@connectrpc/connect-web";
-import { Library } from "./gen/apis/example/service_connect";
-import { SetStateAction, useState } from "react";
-import { Shelf } from "./gen/apis/example/resource_pb";
+import { useState } from "react";
 import doc from "./gen/example/apis/example/service.pb.json";
 import { Method, Proto, Service } from "./gen/apis/tryout/tryout_pb";
-import { GetShelfRequest } from "./gen/apis/example/service_pb";
 
 const baseUrl = document.location.href.replace("5173", "8080");
 
-const transport = createConnectTransport({
-  baseUrl: baseUrl,
-});
-
-const client = createPromiseClient(Library, transport);
-
-function createField(
-  field: string,
-  value: GetShelfRequest,
-  set: React.Dispatch<SetStateAction<GetShelfRequest>>,
-) {
-  return (
-    <label>
-      {field}
-      <input
-        value={value.name}
-        onChange={(e) => {
-          const v = value.clone();
-          v.name = e.target.value;
-          set(v);
-        }}
-      />
-    </label>
-  );
-}
-
 function createMethod(method: Method) {
-  const [inputValue, setInputValue] = useState(new GetShelfRequest());
-  const [shelf, setShelf] = useState<Shelf | null>(null);
-  const [error, setError] = useState<ConnectError | null>(null);
+  const [inputValue, setInputValue] = useState<any>({});
+  const [shelf, setShelf] = useState<any | null>(null);
+  const [error, setError] = useState<any | null>(null);
 
   return (
     <div>
       <h3>{method.name}</h3>
-      {shelf && <p>shelf = {shelf.toJsonString()}</p>}
-      {error && <p>error = {error.message}</p>}
+      {shelf && <p>shelf = {JSON.stringify(shelf)}</p>}
+      {error && <p>error = {JSON.stringify(error)}</p>}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          try {
-            const response = await client.getShelf(inputValue);
-            setShelf(response);
-          } catch (err) {
-            const connectErr = ConnectError.from(err);
-            setError(connectErr);
-          }
+          await fetch(new URL("/example.Library/GetShelf", baseUrl), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(inputValue),
+          }).then((res) => {
+            if (res.ok) {
+              return res.json().then(setShelf);
+            }
+            return res.json().then(setError);
+          });
         }}
       >
-        <label>
-          {method.fields.map((field) =>
-            createField(field, inputValue, setInputValue),
-          )}
-        </label>
+        {method.fields.map((field) => (
+          <label>
+            {field}
+            <input
+              value={inputValue[field]}
+              onChange={(e) => {
+                setInputValue({ ...inputValue, [field]: e.target.value });
+              }}
+            />
+          </label>
+        ))}
         <button type="submit">Send</button>
       </form>
     </div>
