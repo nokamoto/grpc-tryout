@@ -9,6 +9,7 @@ import (
 	context "context"
 	errors "errors"
 	example "github.com/nokamoto/grpc-tryout/pkg/apis/example"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	http "net/http"
 	strings "strings"
 )
@@ -35,11 +36,17 @@ const (
 const (
 	// LibraryGetShelfProcedure is the fully-qualified name of the Library's GetShelf RPC.
 	LibraryGetShelfProcedure = "/example.Library/GetShelf"
+	// LibraryCreateShelfProcedure is the fully-qualified name of the Library's CreateShelf RPC.
+	LibraryCreateShelfProcedure = "/example.Library/CreateShelf"
+	// LibraryDeleteShelfProcedure is the fully-qualified name of the Library's DeleteShelf RPC.
+	LibraryDeleteShelfProcedure = "/example.Library/DeleteShelf"
 )
 
 // LibraryClient is a client for the example.Library service.
 type LibraryClient interface {
 	GetShelf(context.Context, *connect.Request[example.GetShelfRequest]) (*connect.Response[example.Shelf], error)
+	CreateShelf(context.Context, *connect.Request[example.CreateShelfRequest]) (*connect.Response[example.Shelf], error)
+	DeleteShelf(context.Context, *connect.Request[example.DeleteShelfRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewLibraryClient constructs a client for the example.Library service. By default, it uses the
@@ -57,12 +64,24 @@ func NewLibraryClient(httpClient connect.HTTPClient, baseURL string, opts ...con
 			baseURL+LibraryGetShelfProcedure,
 			opts...,
 		),
+		createShelf: connect.NewClient[example.CreateShelfRequest, example.Shelf](
+			httpClient,
+			baseURL+LibraryCreateShelfProcedure,
+			opts...,
+		),
+		deleteShelf: connect.NewClient[example.DeleteShelfRequest, emptypb.Empty](
+			httpClient,
+			baseURL+LibraryDeleteShelfProcedure,
+			opts...,
+		),
 	}
 }
 
 // libraryClient implements LibraryClient.
 type libraryClient struct {
-	getShelf *connect.Client[example.GetShelfRequest, example.Shelf]
+	getShelf    *connect.Client[example.GetShelfRequest, example.Shelf]
+	createShelf *connect.Client[example.CreateShelfRequest, example.Shelf]
+	deleteShelf *connect.Client[example.DeleteShelfRequest, emptypb.Empty]
 }
 
 // GetShelf calls example.Library.GetShelf.
@@ -70,9 +89,21 @@ func (c *libraryClient) GetShelf(ctx context.Context, req *connect.Request[examp
 	return c.getShelf.CallUnary(ctx, req)
 }
 
+// CreateShelf calls example.Library.CreateShelf.
+func (c *libraryClient) CreateShelf(ctx context.Context, req *connect.Request[example.CreateShelfRequest]) (*connect.Response[example.Shelf], error) {
+	return c.createShelf.CallUnary(ctx, req)
+}
+
+// DeleteShelf calls example.Library.DeleteShelf.
+func (c *libraryClient) DeleteShelf(ctx context.Context, req *connect.Request[example.DeleteShelfRequest]) (*connect.Response[emptypb.Empty], error) {
+	return c.deleteShelf.CallUnary(ctx, req)
+}
+
 // LibraryHandler is an implementation of the example.Library service.
 type LibraryHandler interface {
 	GetShelf(context.Context, *connect.Request[example.GetShelfRequest]) (*connect.Response[example.Shelf], error)
+	CreateShelf(context.Context, *connect.Request[example.CreateShelfRequest]) (*connect.Response[example.Shelf], error)
+	DeleteShelf(context.Context, *connect.Request[example.DeleteShelfRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewLibraryHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -86,10 +117,24 @@ func NewLibraryHandler(svc LibraryHandler, opts ...connect.HandlerOption) (strin
 		svc.GetShelf,
 		opts...,
 	)
+	libraryCreateShelfHandler := connect.NewUnaryHandler(
+		LibraryCreateShelfProcedure,
+		svc.CreateShelf,
+		opts...,
+	)
+	libraryDeleteShelfHandler := connect.NewUnaryHandler(
+		LibraryDeleteShelfProcedure,
+		svc.DeleteShelf,
+		opts...,
+	)
 	return "/example.Library/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case LibraryGetShelfProcedure:
 			libraryGetShelfHandler.ServeHTTP(w, r)
+		case LibraryCreateShelfProcedure:
+			libraryCreateShelfHandler.ServeHTTP(w, r)
+		case LibraryDeleteShelfProcedure:
+			libraryDeleteShelfHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -101,4 +146,12 @@ type UnimplementedLibraryHandler struct{}
 
 func (UnimplementedLibraryHandler) GetShelf(context.Context, *connect.Request[example.GetShelfRequest]) (*connect.Response[example.Shelf], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("example.Library.GetShelf is not implemented"))
+}
+
+func (UnimplementedLibraryHandler) CreateShelf(context.Context, *connect.Request[example.CreateShelfRequest]) (*connect.Response[example.Shelf], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("example.Library.CreateShelf is not implemented"))
+}
+
+func (UnimplementedLibraryHandler) DeleteShelf(context.Context, *connect.Request[example.DeleteShelfRequest]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("example.Library.DeleteShelf is not implemented"))
 }
