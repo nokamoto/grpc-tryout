@@ -1,1 +1,17 @@
-{"name":"apis/example/service.proto", "services":[{"name":"Library", "methods":[{"name":"GetShelf", "path":"/example.Library/GetShelf", "fields":["name"]}]}]}
+{
+  "name":  "apis/example/service.proto",
+  "services":  [
+    {
+      "name":  "Library",
+      "methods":  [
+        {
+          "name":  "GetShelf",
+          "path":  "/example.Library/GetShelf",
+          "fields":  [
+            "name"
+          ]
+        }
+      ]
+    }
+  ]
+}
