@@ -1,46 +1,85 @@
 import "./App.css";
-import { ConnectError, createPromiseClient } from "@connectrpc/connect";
-import { createConnectTransport } from "@connectrpc/connect-web";
-import { Library } from "./gen/apis/example/service_connect";
 import { useState } from "react";
-import { Shelf } from "./gen/apis/example/resource_pb";
+import doc from "./gen/example/apis/example/service.pb.json";
+import { Method, Proto, Service } from "./gen/apis/tryout/tryout_pb";
 
 const baseUrl = document.location.href.replace("5173", "8080");
 
-const transport = createConnectTransport({
-  baseUrl: baseUrl,
-});
+function MethodForm(props: { method: Method }) {
+  const initial = () => {
+    const v: any = {};
+    props.method.fields.forEach((field) => {
+      v[field] = "";
+    });
+    return v;
+  };
 
-const client = createPromiseClient(Library, transport);
+  const [request, setRequest] = useState<any>(initial());
+  const [response, setResponse] = useState<any>({});
+  const [error, setError] = useState<any>({});
 
-function App() {
-  const [inputValue, setInputValue] = useState("");
-  const [shelf, setShelf] = useState<Shelf | null>(null);
-  const [error, setError] = useState<ConnectError | null>(null);
   return (
-    <>
+    <div>
+      <h3>{props.method.name}</h3>
+      {response && <p>shelf = {JSON.stringify(response)}</p>}
+      {error && <p>error = {JSON.stringify(error)}</p>}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          try {
-            const response = await client.getShelf({ name: inputValue });
-            setShelf(response);
-          } catch (err) {
-            const connectErr = ConnectError.from(err);
-            setError(connectErr);
-          }
+          await fetch(new URL(props.method.path, baseUrl), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(request),
+          }).then((res) => {
+            if (res.ok) {
+              return res.json().then(setResponse);
+            }
+            return res.json().then(setError);
+          });
         }}
       >
-        <p>{baseUrl}</p>
-        {shelf && <p>shelf = {shelf.toJsonString()}</p>}
-        {error && <p>error = {error.message}</p>}
-        <input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
+        {props.method.fields.map((field) => (
+          <label key={field}>
+            {field}
+            <input
+              value={request[field]}
+              onChange={(e) => {
+                setRequest({ ...request, [field]: e.target.value });
+              }}
+            />
+          </label>
+        ))}
         <button type="submit">Send</button>
       </form>
-    </>
+    </div>
+  );
+}
+
+function MethodList(props: { service: Service }) {
+  return (
+    <div>
+      <h2>{props.service.name}</h2>
+      <div>
+        {props.service.methods.map((method) => (
+          <MethodForm
+            method={method}
+            key={props.service.name + "/" + method.name}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      {Proto.fromJson(doc).services.map((service) => (
+        <MethodList service={service} key={service.name} />
+      ))}
+    </div>
   );
 }
 

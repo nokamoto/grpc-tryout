@@ -13,4 +13,5 @@ jobs:
         with:
           go-version-file: go.mod
       - run: make
-      - run: git diff --exit-code
+      # exclude generated code from diff because `make` will generate with different whitespaces
+      - run: git diff --exit-code -- ':(exclude)examples/web/src/gen/example/*'
