@@ -11,4 +11,3 @@ plugins:
     opt: debug,multiline
   - plugin: tryout
     out: examples/web/src/gen/example
-    opt: multiline
