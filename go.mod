@@ -1,6 +1,6 @@
 module github.com/nokamoto/grpc-tryout
 
-go 1.21.3
+go 1.22.1
 
 require google.golang.org/protobuf v1.31.0
 
