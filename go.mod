@@ -7,7 +7,7 @@ require google.golang.org/protobuf v1.31.0
 require (
 	connectrpc.com/connect v1.12.0
 	github.com/google/go-cmp v0.6.0
-	github.com/onsi/ginkgo/v2 v2.13.0
+	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.29.0
 	github.com/rs/cors v1.10.1
 	golang.org/x/net v0.17.0
