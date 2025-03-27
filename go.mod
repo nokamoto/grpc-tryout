@@ -10,7 +10,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.29.0
 	github.com/rs/cors v1.10.1
-	golang.org/x/net v0.17.0
+	golang.org/x/net v0.38.0
 )
 
 require (
